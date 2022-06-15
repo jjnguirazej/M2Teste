@@ -15,7 +15,13 @@ class ProdutoController extends Controller
      */
     public function index()
     {
-        //
+        $produto = Produto::all();
+
+        return response()->json([
+            'Status'=>true,
+            'message'=>"Lista de Produtos",
+            'data'=>$produto
+        ],200);
     }
 
     /**
@@ -36,7 +42,19 @@ class ProdutoController extends Controller
      */
     public function store(StoreProdutoRequest $request)
     {
-        //
+        try {
+            $produto = Produto::create($request->all());
+            return response()->json([
+            'success'=>true,
+            'message'=>"Produto adicionado com sucesso",
+            'data'=>$produto
+        ],200);
+
+        }
+        catch (\Throwable $th) {
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -47,7 +65,17 @@ class ProdutoController extends Controller
      */
     public function show(Produto $produto)
     {
-        //
+        try {
+            $produto = Produto::find($produto);
+            return response()->json([
+            'status' => true,
+            'data' => $produto],
+            200);
+        }
+        catch (\Exception $th){
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -70,7 +98,19 @@ class ProdutoController extends Controller
      */
     public function update(UpdateProdutoRequest $request, Produto $produto)
     {
-        //
+        try {
+            $produto ->update($request->all());
+            return response()->json([
+            'success'=>true,
+            'message'=>"Produto aactualizado com sucesso",
+            'data'=>$produto
+        ],200);
+
+        }
+        catch (\Throwable $th) {
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -81,6 +121,18 @@ class ProdutoController extends Controller
      */
     public function destroy(Produto $produto)
     {
-        //
+        try {
+            $produto->delete();
+            return response()->json([
+            'success'=>true,
+            'message'=>"Produto Apagado com sucesso",
+            'data'=>$produto
+        ],200);
+
+        }
+        catch (\Throwable $th) {
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 }

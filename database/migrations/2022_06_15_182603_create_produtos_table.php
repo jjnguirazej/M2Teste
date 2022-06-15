@@ -15,6 +15,12 @@ return new class extends Migration
     {
         Schema::create('produtos', function (Blueprint $table) {
             $table->id();
+            $table->index('id_campanha');
+            $table->bigInteger('id_campanha')->unsigned()->nullable();
+            $table->foreign('id_campanha')->references('id')->on('campanhas')->onDelete('cascade');
+             $table->string('nome');
+            $table->text('detalhes');
+            $table->double('preco');
             $table->timestamps();
         });
     }
