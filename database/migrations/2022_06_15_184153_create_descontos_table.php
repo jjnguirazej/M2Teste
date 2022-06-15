@@ -15,6 +15,12 @@ return new class extends Migration
     {
         Schema::create('descontos', function (Blueprint $table) {
             $table->id();
+            $table->index('id_campanha');
+            $table->unsignedBigInteger('id_campanha');
+            $table->string('nome');
+            $table->integer('valor_desconco');
+            $table->foreign('id_campanha')->references('id')->on('campanhas')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDescontoRequest;
 use App\Http\Requests\UpdateDescontoRequest;
 use App\Models\Desconto;
+use App\Models\Produto;
 
 class DescontoController extends Controller
 {
@@ -15,7 +16,13 @@ class DescontoController extends Controller
      */
     public function index()
     {
-        //
+        $desconto = Desconto::all();
+
+        return response()->json([
+            'Status'=>true,
+            'message'=>"Lista de Desconto",
+            'data'=>$desconto
+        ],200);
     }
 
     /**
@@ -36,7 +43,32 @@ class DescontoController extends Controller
      */
     public function store(StoreDescontoRequest $request)
     {
-        //
+        try {
+
+            $desconto = new Desconto();
+            $desconto-> id_campanha = $request->id_campanha;
+            $desconto-> nome = $request->nome;
+            $desconto-> valor_desconco = $request->valor_desconco;
+            $desconto->save();
+
+            $precos = Produto::select('preco')->where('id_campanha', $request->id_campanha)->get('preco');
+            foreach ($precos as $preco){
+                $preco->preco = $preco->preco - $request->valor_desconco;
+                $preco->save();
+                // Produto::where('id_campanha',$request->id_campanha)->update(['preco'=>$preco->preco - $request->valor_desconco]);
+            }
+            
+            return response()->json([
+            'success'=>true,
+            'message'=>"Desconto adicionado com sucesso",
+
+
+        ],200);
+        }
+        catch (\Throwable $th) {
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -70,7 +102,19 @@ class DescontoController extends Controller
      */
     public function update(UpdateDescontoRequest $request, Desconto $desconto)
     {
-        //
+        try {
+            $desconto->update($request->nome);
+            return response()->json([
+                'success'=>true,
+                'message'=>"Desconto actualizado com sucesso",
+                'data'=>$$desconto
+            ],200);
+        }
+        catch (\Throwable $th) {
+
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -81,6 +125,23 @@ class DescontoController extends Controller
      */
     public function destroy(Desconto $desconto)
     {
-        //
+        try {
+            $desconto->delete();
+
+            $precos = Produto::select('preco')->where('id_campanha', $desconto->id_campanha)->get('preco');
+            foreach ($precos as $preco){
+                $preco->preco = $preco->preco + $desconto->valor_desconco;
+                $preco->save();
+            }
+            return response()->json([
+                'success'=>true,
+                'message'=>"Desconto apagado com sucesso",
+
+            ],200);
+        }
+        catch (\Throwable $th) {
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 }

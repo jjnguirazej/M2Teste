@@ -6,6 +6,7 @@ use App\Http\Controllers\CidadeController;
 use App\Http\Controllers\GrupoCidadeController;
 use App\Http\Controllers\CampanhaController;
 use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\DescontoController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -29,3 +30,4 @@ Route::ApiResource('campanhas', CampanhaController::class);
 
 Route::ApiResource('produtos', ProdutoController::class);
 
+Route::ApiResource('desconto', DescontoController::class);
