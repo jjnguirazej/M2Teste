@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('grupo_cidades', function (Blueprint $table) {
             $table->id();
+            $table->index('id_cidade');
+            $table->unsignedBigInteger('id_cidade')->nullable()->unique();
+            $table->foreign('id_cidade')->references('id')->on('cidades')->onDelete('cascade');
+            $table->string('nome');
             $table->timestamps();
         });
     }

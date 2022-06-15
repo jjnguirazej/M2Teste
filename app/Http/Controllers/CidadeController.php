@@ -15,7 +15,13 @@ class CidadeController extends Controller
      */
     public function index()
     {
-        //
+        $cidade = Cidade::all();
+
+      return response()->json([
+          'Status'=>true,
+          'message'=>"Lista de Cidade",
+          'data'=>$cidade
+      ],200);
     }
 
     /**
@@ -34,9 +40,20 @@ class CidadeController extends Controller
      * @param  \App\Http\Requests\StoreCidadeRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCidadeRequest $request)
-    {
-        //
+    public function store(StoreCidadeRequest $request){
+
+        try {
+            $cidade = Cidade::create($request->all());
+            return response()->json([
+            'success'=>true,
+            'message'=>"Cidade adicionada com sucesso",
+            'data'=>$cidade
+        ],200);
+        }
+        catch (\Throwable $th) {
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -45,9 +62,20 @@ class CidadeController extends Controller
      * @param  \App\Models\Cidade  $cidade
      * @return \Illuminate\Http\Response
      */
-    public function show(Cidade $cidade)
-    {
-        //
+    public function show(Cidade $cidade){
+
+        try {
+            $cidade = Cidade::find($cidade);
+            return response()->json([
+            'status' => true,
+            'data' => $cidade],
+            200);
+        }
+        catch (\Exception $th){
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
+
     }
 
     /**
@@ -68,9 +96,21 @@ class CidadeController extends Controller
      * @param  \App\Models\Cidade  $cidade
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateCidadeRequest $request, Cidade $cidade)
-    {
-        //
+    public function update(UpdateCidadeRequest $request, Cidade $cidade){
+
+        try {
+            $cidade->update($request->all());
+            return response()->json([
+                'success'=>true,
+                'message'=>"Cidade actualizada com sucesso",
+                'data'=>$cidade
+            ],200);
+        }
+        catch (\Throwable $th) {
+
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -81,6 +121,16 @@ class CidadeController extends Controller
      */
     public function destroy(Cidade $cidade)
     {
-        //
+        try {
+            $cidade->delete();
+            return response()->json([
+                'success'=>true,
+                'message'=>"Cidade apagada com sucesso",
+            ],200);
+        }
+        catch (\Throwable $th) {
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 }

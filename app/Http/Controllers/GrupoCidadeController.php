@@ -15,7 +15,13 @@ class GrupoCidadeController extends Controller
      */
     public function index()
     {
-        //
+        $grupoCidade = GrupoCidade::all();
+
+        return response()->json([
+            'Status'=>true,
+            'message'=>"Lista de Grupos de Cidade",
+            'data'=>$grupoCidade
+        ],200);
     }
 
     /**
@@ -36,7 +42,18 @@ class GrupoCidadeController extends Controller
      */
     public function store(StoreGrupoCidadeRequest $request)
     {
-        //
+        try {
+            $grupoCidade = GrupoCidade::create($request->all());
+            return response()->json([
+            'success'=>true,
+            'message'=>"Grupo adicionado com sucesso",
+            'data'=>$grupoCidade
+        ],200);
+        }
+        catch (\Throwable $th) {
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -47,7 +64,17 @@ class GrupoCidadeController extends Controller
      */
     public function show(GrupoCidade $grupoCidade)
     {
-        //
+        try {
+            $grupoCidade = GrupoCidade::find($grupoCidade);
+            return response()->json([
+            'status' => true,
+            'data' => $grupoCidade],
+            200);
+        }
+        catch (\Exception $th){
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -70,7 +97,19 @@ class GrupoCidadeController extends Controller
      */
     public function update(UpdateGrupoCidadeRequest $request, GrupoCidade $grupoCidade)
     {
-        //
+        try {
+            $grupoCidade->update($request->all());
+            return response()->json([
+                'success'=>true,
+                'message'=>"Grupo de Cidade actualizada com sucesso",
+                'data'=>$grupoCidade
+            ],200);
+        }
+        catch (\Throwable $th) {
+
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -81,6 +120,17 @@ class GrupoCidadeController extends Controller
      */
     public function destroy(GrupoCidade $grupoCidade)
     {
-        //
+        try {
+            $grupoCidade->delete();
+            return response()->json([
+                'success'=>true,
+                'message'=>"Cidade apagada com sucesso",
+
+            ],200);
+        }
+        catch (\Throwable $th) {
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 }
