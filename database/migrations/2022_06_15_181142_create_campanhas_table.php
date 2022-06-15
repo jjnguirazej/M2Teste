@@ -15,6 +15,12 @@ return new class extends Migration
     {
         Schema::create('campanhas', function (Blueprint $table) {
             $table->id();
+            $table->index('id_grupo_cidade');
+            $table->unsignedBigInteger('id_grupo_cidade');
+            $table->foreign('id_grupo_cidade')->references('id')
+            ->on('grupo_cidades')->onDelete('cascade');
+            $table->string('nome');
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

@@ -15,7 +15,13 @@ class CampanhaController extends Controller
      */
     public function index()
     {
-        //
+        $campanha = Campanha::all();
+
+        return response()->json([
+            'Status'=>true,
+            'message'=>"Lista de Campanha",
+            'data'=>$campanha
+        ],200);
     }
 
     /**
@@ -36,7 +42,19 @@ class CampanhaController extends Controller
      */
     public function store(StoreCampanhaRequest $request)
     {
-        //
+        try {
+
+            $campanha = Campanha::create($request->all());
+            return response()->json([
+            'success'=>true,
+            'message'=>"Campanha adicionado com sucesso",
+            'data'=>$campanha
+        ],200);
+        }
+        catch (\Throwable $th) {
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -47,7 +65,17 @@ class CampanhaController extends Controller
      */
     public function show(Campanha $campanha)
     {
-        //
+        try {
+            $campanha = Campanha::find($campanha);
+            return response()->json([
+            'status' => true,
+            'data' => $campanha],
+            200);
+        }
+        catch (\Exception $th){
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -70,7 +98,19 @@ class CampanhaController extends Controller
      */
     public function update(UpdateCampanhaRequest $request, Campanha $campanha)
     {
-        //
+        try {
+            $campanha->update($request->all());
+            return response()->json([
+                'success'=>true,
+                'message'=>"Campanha actualizada com sucesso",
+                'data'=>$campanha
+            ],200);
+        }
+        catch (\Throwable $th) {
+
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 
     /**
@@ -81,6 +121,16 @@ class CampanhaController extends Controller
      */
     public function destroy(Campanha $campanha)
     {
-        //
+        try {
+            $campanha->delete();
+            return response()->json([
+                'success'=>true,
+                'message'=>"Campanha apagada com sucesso",
+            ],200);
+        }
+        catch (\Throwable $th) {
+            return response()->json(['response'=>['message'=>false, 'data'=>null ,'exception'=>$th->getMessage()]],500);
+
+        }
     }
 }

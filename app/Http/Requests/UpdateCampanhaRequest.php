@@ -13,7 +13,7 @@ class UpdateCampanhaRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,9 @@ class UpdateCampanhaRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'nome' => 'required|min:3|max:50',
+            'id_grupo_cidade' => 'required',
+            'status' => 'sometimes'
         ];
     }
 }
