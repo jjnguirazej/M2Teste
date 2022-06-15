@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CidadeController;
 use App\Http\Controllers\GrupoCidadeController;
 use App\Http\Controllers\CampanhaController;
+use App\Http\Controllers\ProdutoController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,4 +26,6 @@ Route::ApiResource('cidades', CidadeController::class);
 Route::ApiResource('grupo-cidades', GrupoCidadeController::class);
 
 Route::ApiResource('campanhas', CampanhaController::class);
+
+Route::ApiResource('produtos', ProdutoController::class);
 
